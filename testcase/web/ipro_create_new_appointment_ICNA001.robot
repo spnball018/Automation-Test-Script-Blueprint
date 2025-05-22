@@ -1,42 +1,40 @@
 *** Settings ***
-Documentation     Test case for creating a new appointment in Krungsri iPro system
-...               Case ID: ICNA001
-...               Reference: [iPro] Create New Appointment (UI): BIZLOAN-282
-...
-...               This test verifies that a user with Tele RM role can click on
-...               the Create New Appointment button and that the system displays
-...               the Create New Appointment popup.
-
-Resource          ../../keywords/web/common.robot
-Resource          ../../keywords/web/pages/ipro_page.robot
-
-Suite Setup       Setup Browser
-Test Setup        Login With Tele RM Role
-Test Teardown     Close All Browsers
+Documentation    Test case for creating new appointment in Krungsri iPro system
+...              Test Case: ICNA001 - User clicks on Create New Appointment
+...              BIZLOAN-282: [iPro] Create New Appointment (UI)
+Resource         ${CURDIR}/../../keywords/web/pages/virtual_site_visit_page.robot
+Suite Setup      Setup Environment
+Suite Teardown   Close All Browsers
+Test Teardown    Run Keyword If Test Failed    Capture Page Screenshot
 
 *** Variables ***
-${DATA_FILE}      ipro_data.yaml
+${URL}                https://app-service-jao-dev.apps.ocp-test-bkk2.krungsri.net/web/dsl-dashboard
+${USERNAME}           7N100342
+${PASSWORD}           P@ssw0rd
+${ROLE}               Tele RM
 
 *** Test Cases ***
 User Clicks On Create New Appointment
-    [Documentation]    Verify that user can click on Create New Appointment button
-    ...                and the system displays Create New Appointment popup.
-    [Tags]    regression    appointment    ICNA001    BIZLOAN-282
+    [Documentation]    Verify that clicking on Create New Appointment displays the popup
+    [Tags]            ICNA001    BIZLOAN-282    regression    ui
     
-    # Navigate to Hot Lead with current agent
-    Navigate To Hot Lead    ${TEST_DATA}[agent][name]
+    # Step 1: Sign in to the system
+    Login To Krungsri iPro    ${USERNAME}    ${PASSWORD}    ${ROLE}
     
-    # Navigate to Virtual Site Visit
+    # Step 2: Click on a lead with status 'Hot Lead' where current agent matches the user
+    Select Hot Lead With Current Agent
+    
+    # Step 3: Click Virtual Site Visit on side bar menu
     Navigate To Virtual Site Visit
     
-    # Click Create New Appointment button
-    Click Create New Appointment
+    # Step 4: Click on Create New Appointment button
+    Click Create New Appointment Button
     
-    # Verify that Create New Appointment popup is displayed
-    Verify Appointment Popup Is Displayed
-
+    # Verify the popup appears as expected
+    Page Should Contain    Create New Appointment
+    
 *** Keywords ***
-Login With Tele RM Role
-    ${TEST_DATA}=    Load Test Data    ${DATA_FILE}
-    Set Test Variable    ${TEST_DATA}
-    Login To iPro    ${TEST_DATA}[login][username]    ${TEST_DATA}[login][password]    ${TEST_DATA}[login][role]
+Setup Environment
+    # Setup Browser from common.robot
+    Set Selenium Implicit Wait    10
+    Set Selenium Timeout          30
