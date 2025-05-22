@@ -1,2 +1,2 @@
 browser: chrome
-url: '' # TODO: Provide the URL for testing
+url: https://app-service-jao-dev.apps.ocp-test-bkk2.krungsri.net/web/dsl-dashboard
