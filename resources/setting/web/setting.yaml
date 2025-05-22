@@ -1,2 +1,2 @@
 browser: chrome
-url: https://app-service-jao-dev.apps.ocp-test-bkk2.krungsri.net/web/dsl-dashboard
+url: 'https://app-service-jao-dev.apps.ocp-test-bkk2.krungsri.net/web/dsl-dashboard'
